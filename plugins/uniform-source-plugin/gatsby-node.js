@@ -41,35 +41,34 @@ exports.sourceNodes = async ({
 
   console.log(`${compositions.length} loaded from Uniform Canvas`);
 
-  compositions.forEach(async (c) => {
-    // await enhance({
-    //   composition: c.composition,
-    //   // the enhancer builder binds your enhancer to _any_ parameter
-    //   enhancers: new EnhancerBuilder().parameter(helloWorldParameterEnhancer),
-    // });
-    await enhance({
-      composition: c.composition,
-      enhancers: new EnhancerBuilder().parameterType(
-        CANVAS_CONTENTFUL_PARAMETER_TYPES, 
-        contentfulEnhancer
-      ),
-      context: {},
-    });    
-    console.log('>>>', c.composition)
+  await Promise.all(
+    compositions.map(async c => {
+      await enhance({
+        composition: c.composition,
+        enhancers: new EnhancerBuilder().parameterType(
+          CANVAS_CONTENTFUL_PARAMETER_TYPES,
+          contentfulEnhancer
+        ),
+        context: {},
+      })
 
-    return createNode({
-      ...c,
-      id: createNodeId(`Composition-${c.composition._id}`),
-      name: c.composition._name,
-      slug: c.composition._slug,
-      componentType: c.composition.type,
-      slots: JSON.stringify(c.composition.slots),
-      parameters: c.composition.parameters,
-      internal: {
-        type: "Compositions",
-        contentDigest: createContentDigest(c),
-      },
+      console.log("enhanced >>>", JSON.stringify(c.composition))
+
+      return createNode({
+        ...c,
+        id: createNodeId(`Composition-${c.composition._id}`),
+        name: c.composition._name,
+        slug: c.composition._slug,
+        componentType: c.composition.type,
+        slots: JSON.stringify(c.composition.slots),
+        parameters: JSON.stringify(c.composition.parameters),
+        internal: {
+          type: "Compositions",
+          contentDigest: createContentDigest(c),
+        },
+      })
     })
-  });
+  )
+  
   return;
 };

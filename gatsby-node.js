@@ -9,16 +9,7 @@ exports.createPages = async function ({ actions, graphql }) {
             state
             slots
             componentType
-            parameters {
-              _enr {
-                type
-                value {
-                  cat
-                  key
-                  str
-                }
-              }
-            }
+            parameters
             composition {
               _id
               _name
@@ -30,6 +21,7 @@ exports.createPages = async function ({ actions, graphql }) {
       }
     }
   `)
+  console.log('data --->', data)
   data.allCompositions.compositions.forEach(c => {
     const slug = c.node.slug
     console.log(`Creating a page "${slug}"...`)
