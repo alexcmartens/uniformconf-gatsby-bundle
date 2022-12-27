@@ -6,6 +6,7 @@ const {
   CANVAS_CONTENTFUL_PARAMETER_TYPES,
 } = require('@uniformdev/canvas-contentful');
 const { createClient } = require('contentful');
+//const { localize } = require('@uniformdev/canvas');
 const fetch = require("node-fetch");
 
 const client = createClient({
@@ -51,7 +52,18 @@ exports.sourceNodes = async ({
         ),
         context: {},
       })
-
+/*
+      localize({
+        composition: c.composition,
+        locale: ({ locales }) => {
+          console.log('locales --->', locales);
+          // if (locales.includes('!!! YOUR VISITOR LOCALE !!!')) {
+          //   return '!!! YOUR VISITOR LOCALE !!!';
+          // }
+          return 'Spanish';
+        }
+      });
+*/
       console.log("enhanced >>>", JSON.stringify(c.composition))
 
       return createNode({
@@ -69,6 +81,6 @@ exports.sourceNodes = async ({
       })
     })
   )
-  
+
   return;
 };
